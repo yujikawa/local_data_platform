@@ -1,0 +1,5 @@
+[sqlfluff:rules:L010]
+capitalisation_policy = lower
+
+[sqlfluff:rules:L019]
+comma_style = leading

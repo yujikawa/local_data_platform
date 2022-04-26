@@ -1,0 +1,11 @@
+data_platform:
+  target: dev
+  outputs:
+    dev:
+      type: mysql
+      server: datawarehouse
+      port: 3306
+      schema: analytics
+      username: root
+      password: root
+      ssl_disabled: True

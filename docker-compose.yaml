@@ -11,26 +11,39 @@ services:
       - 3306:3306
     environment:
       MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: analytics
   dbt:
     <<: *py-common
-    working_dir: /workspace/mydbt
+    working_dir: /workspace/dbt/data_platform
+    # entrypoint: dbt docs serve --profiles-dir /workspace/dbt/data_platform
+    entrypoint: sh dbt_build.sh
+    volumes:
+      - ./docker/dbt:/workspace/dbt  
     ports:
       - 9090:8080
+    depends_on:
+      - datawarehouse
   airflow:
     <<: *py-common
     working_dir: /workspace/airflow
+    volumes:
+      - ./docker/airflow:/workspace/airflow
     entrypoint: airflow standalone
     ports:
       - 8080:8080
   streamlit:
     <<: *py-common
-    working_dir: /workspace/streamlit_app
+    working_dir: /workspace/streamlit
+    volumes:
+      - ./docker/streamlit:/workspace/streamlit
     entrypoint: streamlit hello --server.port 8080
     ports:
       - 7070:8080
   notebook:
     <<: *py-common
     working_dir: /workspace/notebook
+    volumes:
+      - ./docker/notebook:/workspace/notebook
     entrypoint: >
       jupyter-lab
       --allow-root
